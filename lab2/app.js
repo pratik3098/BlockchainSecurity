@@ -1,23 +1,34 @@
 const ethers = require('ethers')
 const ganache = require('ganache-cli')
-const server = ganache.server()
-let port = 8090
+const server = ganache.server('mnemonic')
+const port = 8545
 let provider=new ethers.providers.JsonRpcProvider('http://localhost:'+port)
+let mnemonic = Object.values(Object.values(server.provider)[3])[15]
 
-let privateKey= '0x5aebccecefb08a00a7c74d68a17b973d1bb5896e1194c6e949fe144747677c8d'
-let wallet= new ethers.Wallet(privateKey, provider)
+let wallet= ethers.Wallet.fromMnemonic(mnemonic)
 
+wallet = new ethers.Wallet(wallet.privateKey, provider)
 
-wallet.sendTransaction({
-    to: '0xA91F9Bf0578a0820cD2A83AAb0e4ae9F0f17BAE4',
-    value: ethers.utils.parseEther('0.1')
-}).then(tx => {
-   console.log(tx)
+wallet.sign({
+   to: '0x27AA8c520E6D41f2274d9F2C30D9EfFc4C357e31',
+   value: ethers.utils.parseEther('0.1'),
+   gasLimit: 4712388,
+  gasPrice: 100000000000
+}).then(res=>{
+   console.log('Signed transcation: '+res)
+   
+   provider.sendTransaction(res).then(tx=>{
+      console.log(tx)
+
+   }).catch(err=>{
+      console.error('Error:', err.message)
+   })
+
 }).catch(err=>{
    console.error('Error: ', err.message )
+   console.log(err.transaction)
 }) 
 
 server.listen(port,()=>{
    console.log('Server listen port : '+ port)
 })
-
