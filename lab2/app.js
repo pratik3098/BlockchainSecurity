@@ -6,8 +6,7 @@ let provider=new ethers.providers.JsonRpcProvider('http://localhost:'+port)
 let mnemonic = Object.values(Object.values(server.provider)[3])[15]
 
 let wallet= ethers.Wallet.fromMnemonic(mnemonic)
-
-wallet = new ethers.Wallet(wallet.privateKey, provider)
+wallet.connect(provider)
 
 wallet.sign({
    to: '0x27AA8c520E6D41f2274d9F2C30D9EfFc4C357e31',
