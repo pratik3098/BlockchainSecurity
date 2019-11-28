@@ -1,19 +1,20 @@
 const ethers = require('ethers')
-
-
-let provider=new ethers.providers.JsonRpcProvider()
+const ganache = require("ganache-cli")
+let provider = new ethers.providers.Web3Provider(ganache.provider())
+//let provider=new ethers.providers.JsonRpcProvider()
 
 let privateKey= '0x5aebccecefb08a00a7c74d68a17b973d1bb5896e1194c6e949fe144747677c8d'
 let wallet= new ethers.Wallet(privateKey, provider)
 
-console.log(wallet)
 
 
 wallet.sendTransaction({
-    to: "ricmoo.firefly.eth",
+    to: '0xA91F9Bf0578a0820cD2A83AAb0e4ae9F0f17BAE4',
     value: ethers.utils.parseEther('0.1')
 }).then(tx => {
    console.log(tx)
 }).catch(err=>{
    console.error('Error: ',err )
-})
+}) 
+
+
