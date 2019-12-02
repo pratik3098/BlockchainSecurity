@@ -21,7 +21,7 @@ contract Tipjar {
     function withdraw_tip(uint amt)public payable onlyOwner() suff_bal(amt){
         balance-=amt;
        
-        emit Log("Tip;Jar balance: ", balance);
+        emit Log("TipJar balance: ", balance);
     }
     function get_Balance() public view returns (uint){
          return balance;
