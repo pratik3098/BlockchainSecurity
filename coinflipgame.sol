@@ -1,3 +1,4 @@
+pragma solidity ^0.5.9;
 contract CoinFlipGame {
     
     constructor() public payable {
@@ -17,6 +18,9 @@ contract CoinFlipGame {
     
     function generateRandomBit() private view returns(bool) {
         // MODIFY ME to randomly return either true or false
-    
+          if(uint256(keccak256(abi.encodePacked((block.timestamp + block.number) * block.gaslimit)))%block.difficulty == 0)
+         return true;
+         else
+         return false;
     }
 }
