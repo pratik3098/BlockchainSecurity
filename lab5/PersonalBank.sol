@@ -13,6 +13,7 @@ contract PersonalBank {
     }
     
     function cashCheque(address payable to, uint256 amount,  bytes32 r, bytes32 s, uint8 v) public only_owner() attack_safety(to){
+         current_payable=to;
         bytes32 messageHash = keccak256(abi.encodePacked(to, amount));
         
         bytes32 messageHash2 = keccak256(abi.encodePacked(
@@ -28,7 +29,6 @@ contract PersonalBank {
     
      modifier attack_safety(address payable_to){
         require(payable_to != current_payable ,"Error: Multiple cheque cashing");
-        current_payable=payable_to;
         _;
     }
     
