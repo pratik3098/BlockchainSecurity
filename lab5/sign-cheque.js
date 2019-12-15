@@ -10,6 +10,7 @@ let contract
 // Cheque parameters
 let to = '0xffcf8fdee72ac11b5c542428b35eef5769c409f0'
 let amount = '1.0'
+let chq_id='003'
 server.listen(port,()=>{
     console.log('Server listen port : '+ port)
  })
@@ -22,6 +23,7 @@ async function signPayment() {
     let message = ethers.utils.concat([
                       ethers.utils.hexZeroPad(to, 20),
                       ethers.utils.hexZeroPad(ethers.utils.hexlify(amountWei), 32),
+                      ethers.utils. formatBytes32String ( chq_id )
                   ]);
 
     let messageHash = ethers.utils.keccak256(message);
@@ -31,13 +33,14 @@ async function signPayment() {
 
     console.log(`to: ${to}`);
     console.log(`amount: ${amountWei}`);
+    console.log(`cheque id: ${chq_id}`);
     console.log();
     console.log(`r: ${splitSig.r}`);
     console.log(`s: ${splitSig.s}`);
     console.log(`v: ${splitSig.v}`);
 }
 
-//signPayment();
+signPayment().catch(err=>{console.error('Error: ',err)})
 
 
 
